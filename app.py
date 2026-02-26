@@ -159,12 +159,17 @@ with col2:
         delta_color="inverse"
     )
 with col3:
-    st.metric(
-        label="Emissions Reduction",
-        value=f"{em_saving_pct:.1f}%",
-        delta="vs current design",
-        delta_color="inverse" if em_saving_pct >= 0 else "normal"
-    )
+    min_g = min_grade.get(category, 'M10')
+    grade_is_invalid = GRADE_LIST.index(grade) < GRADE_LIST.index(min_g)
+    if grade_is_invalid:
+        st.warning(f"⚠️ {grade} is below minimum grade for {category} ({min_g}). Upgrade required.")
+    else:
+        st.metric(
+            label="Emissions Reduction",
+            value=f"{em_saving_pct:.1f}%",
+            delta="vs current design",
+            delta_color="inverse" if em_saving_pct >= 0 else "normal"
+        )
 
 # ============================================================
 # SECTION 2 — RECOMMENDED GRADE ALLOCATION
